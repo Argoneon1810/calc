@@ -30,7 +30,7 @@ class ExpressionValidator {
         }
     }
     
-    func handleError(textToShow: String) -> Int{
+    static func handleError(textToShow: String) -> Int{
         print(textToShow)
         exit(-1)
     }
