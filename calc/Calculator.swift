@@ -14,44 +14,44 @@ class Calculator {
             //first, calculate ignoring overflow
             result = value_A.addingReportingOverflow(value_B)
             //if overflow, emit error
-            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected (Addition)")}
+            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected")}
             //else, return properly
             return result.partialValue
         case .Minus:
             //first, calculate ignoring overflow
             result = value_A.subtractingReportingOverflow(value_B)
             //if overflow, emit error
-            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected (Subtraction)")}
+            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected")}
             //else, return properly
             return result.partialValue
         case .Multiply:
             //first, calculate ignoring overflow
             result = value_A.multipliedReportingOverflow(by: value_B)
             //if overflow, emit error
-            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected (Multiplication)")}
+            if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected")}
             //else, return properly
             return result.partialValue
         case .Divide:
             //first, if divided by 0, return Int.min
-            if value_B==0 {ExpressionValidator.handleError(textToShow: "Division by zero was detected (Division operation)")}
+            if value_B==0 {ExpressionValidator.handleError(textToShow: "Division by zero")}
             //else
             else {
                 //calculate ignoring overflow
                 result = value_A.dividedReportingOverflow(by: value_B)
                 //if overflow, emit error
-                if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected (Division)")}
+                if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected")}
                 //else, return properly
                 return value_A/value_B
             }
         case .Remainder:
             //first, if divided by 0, return Int.min
-            if value_B==0 {ExpressionValidator.handleError(textToShow: "Division by zero was detected (Remainder operation)")}
+            if value_B==0 {ExpressionValidator.handleError(textToShow: "Division by zero")}
             //else
             else{
                 //calculate ignoring overflow
                 result = value_A.remainderReportingOverflow(dividingBy: value_B)
                 //if overflow, emit error
-                if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected (Remainder)")}
+                if result.overflow {ExpressionValidator.handleError(textToShow: "Overflow detected")}
                 //else, return properly
                 return value_A%value_B
             }
