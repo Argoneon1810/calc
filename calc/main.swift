@@ -11,4 +11,14 @@ import Foundation
 var args = ProcessInfo.processInfo.arguments
 args.removeFirst() // remove the name of the program
 
-print(Int(args[0])!)
+let texts: [String] = args
+if ExpressionValidator().validate(original: texts) != [] {       //if given texts (String Array) meets the equation validity
+    let exPros: ExpressionProcessor = ExpressionProcessor()      //(class instance to be used for next lines)
+    print(                                                      //print result recieved through argument
+        Node().traverse(                                            //String will be returned after Node Tree traversing is finished
+            root: exPros.postfix2NodeTree(                               //Node will be returned if the given postfix expression (String Array) is valid
+                expression: exPros.infix2postfix(expression: texts)          //String Array will be returned, ordered in postfix expression if the given infix is valid
+            )
+        )
+    )
+}
