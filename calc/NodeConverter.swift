@@ -8,42 +8,40 @@
 
 class NodeConverter {
     func infix2postfix(expression: [String]) -> [String] {
-        var operators: [MathExtras.Operators] = [MathExtras.Operators]()          //array to store operators temporarily
-        var postfixedExpression: [String] = [String]()      //array to store postfixed expression temporarily
-        
-        for node: String in expression {                    //loop for String Array Length
-            if let sign = MathExtras.Operators(rawValue: node) {       //when this iteration's expression node was an operator
-                let optionalOperator: MathExtras.Operators? = operators.popLast()  //optional const to check if oprs String Array has a value within already
-                let new = MathExtras.getPriority(sign: sign)                       //priority of current iteration's operator
-                
-                if let old = optionalOperator {                         //when oprs was not empty
-                    if MathExtras.getPriority(sign: old) >= new {                      //when new operator is lessly or equally prioritised than old one
-                        postfixedExpression.append(old.getRaw())                //put old one to returning array
-                        operators.append(sign)                                  //and store new one to oprs
-                    } else {                                                //when new operator is morely prioritised than old one
-                        operators.append(old)                                   //put old one back to oprs
-                        operators.append(sign)                                  //and store new one too into oprs   (They will be out later)
-                    }
-                } else {                                        //when oprs was empty (possibly it was the first iteration, or just coincidence)
-                    operators.append(sign)                      //store new one into oprs array directly
-                }
-            } else {                                        //when this iteration's expression node was a number
-                if Int(node) != nil {                           //if non-operator expression is a number
-                    postfixedExpression.append(node)                //store number (in String) to returning array
-                }
-                else { return [String]() }                      //For error handling
+        var operators: [MathExtras.Operators] = [MathExtras.Operators]()        //where operators are stored temporarily
+        var postfixedExpression: [String] = [String]()                          //where result will be constructed gradually
+        var debugIsNumber: Bool = true                                          //used when given text is neither an operator nor a number
+        for string: String in expression {                                      //loop for given array of texts
+            if Int(string) != nil {                                                 //if current iteration is a number
+                postfixedExpression.append(string)                                      //add that directly to the returning array
             }
+            else {                                                                  //if current iteration is something else
+                if let newSign = MathExtras.Operators(rawValue: string) {               //if current iteration is an operator
+                    if let lastSign: MathExtras.Operators = operators.popLast() {           //if array of operators had a remaining value
+                        if lastSign.getPriority() >= newSign.getPriority() {                    //if new one has lower priority than old due rules of arithmatics
+                            postfixedExpression.append(lastSign.getRaw())                           //release old one to returning array
+                            operators.append(newSign)                                               //and store new one temporarily
+                        }
+                        else {                                                                  //if new one has higher prioirity than old
+                            operators.append(lastSign)                                              //store both to operator stack temporarily
+                            operators.append(newSign)
+                        }
+                    }
+                    else {                                                                  //if array of operators didnt have anything left
+                        operators.append(newSign)                                               //store current operator temporarily
+                    }
+                }
+                else {                                                                  //if current iteration is neither a number nor an operator
+                    if debugIsNumber {ExpressionValidator.handleError(textToShow: "Invalid number: " + string)} //if it was a number's turn
+                    else {ExpressionValidator.handleError(textToShow: "Unknown operator: " + string)}           //if it was an operator's turn
+                }
+            }
+            debugIsNumber = !debugIsNumber                                          //error message differentialtion purpose
         }
-        
-        //Preparation of array since I need it to be popped in LIFO order
-        operators.reverse()
-        
-        //Add every operators to expression (Postfix)
-        for opr: MathExtras.Operators in operators {
-            postfixedExpression.append(opr.getRaw())
+        operators.reverse()                                                     //as temporarily stored operators in array has to be released LIFO order, reverse it
+        for opr: MathExtras.Operators in operators {                            //loop for length of operators
+            postfixedExpression.append(opr.getRaw())                                //and append it to returning array
         }
-        
-        //Return final result
         return postfixedExpression
     }
     

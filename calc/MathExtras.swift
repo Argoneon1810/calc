@@ -45,14 +45,13 @@ class MathExtras {
         func getRaw() -> String {
             return self.rawValue
         }
-    }
-    
-    static func getPriority(sign: Operators) -> Priority {
-        switch sign {
-        case .Multiply, .Divide, .Remainder:
-            return Priority.Medium
-        case .Plus, .Minus:
-            return Priority.Less
+        func getPriority() -> Priority {
+            switch self {
+            case .Multiply, .Divide, .Remainder:
+                return Priority.Medium
+            case .Plus, .Minus:
+                return Priority.Less
+            }
         }
     }
 }
